@@ -53,8 +53,8 @@ app.post('/voice-response', async (req, res) => {
             ...session.conversation,
             { role: 'user', content: userMessage }
         ],
-        temperature: 1,
-        max_tokens: 256,
+        temperature: 0.7,
+        max_tokens: 150,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
