@@ -20,6 +20,10 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+app.get('/test', (req, res) => {
+    res.send('App is running');
+});
+
 app.post('/voice', (req, res) => {
     const session = req.session;
     if (!session.conversation) {
