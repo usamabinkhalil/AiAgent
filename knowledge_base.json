@@ -1,0 +1,16 @@
+{
+    "greetings": [
+        "Hello! How can I assist you today?",
+        "Hi there! What can I help you with?"
+    ],
+    "faqs": [
+        {
+            "question": "What is your return policy?",
+            "answer": "Our return policy lasts 30 days. If 30 days have gone by since your purchase, unfortunately, we can’t offer you a refund or exchange."
+        },
+        {
+            "question": "How do I track my order?",
+            "answer": "Once your order is shipped, you will receive an email with the tracking number and a link to track your order."
+        }
+    ]
+}
