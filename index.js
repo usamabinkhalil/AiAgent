@@ -48,7 +48,7 @@ app.post('/voice-response', async (req, res) => {
 
 
     const openaiResponse = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o-mini',
         messages: [
             ...session.conversation,
             { role: 'user', content: userMessage }
