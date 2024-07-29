@@ -21,7 +21,25 @@ app.use(session({
 }));
 
 app.get('/test', (req, res) => {
+    twilioClient.incomingPhoneNumbers.get({ phoneNumber: '+12562897247' })
+        .then(numbers => {
+            if (numbers.length > 0) {
+                console.log(numbers);
+                // const incomingPhoneNumber = numbers[0];
+                // return twilioClient.incomingPhoneNumbers(incomingPhoneNumber.sid)
+                //     .update({ voiceUrl: newVoiceUrl });
+            } else {
+                throw new Error('Phone number not found');
+            }
+        })
+        .then(updatedNumber => {
+            console.log(`Updated voice URL for ${updatedNumber}`);
+        })
+        .catch(error => {
+            console.error('Error updating voice URL:', error);
+        });
     res.send('App is running');
+
 });
 
 app.post('/voice', (req, res) => {
@@ -48,7 +66,7 @@ app.post('/voice-response', async (req, res) => {
 
 
     const openaiResponse = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: 'gpt-3.5-turbo',
         messages: [
             ...session.conversation,
             { role: 'user', content: userMessage }
