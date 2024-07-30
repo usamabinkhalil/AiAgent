@@ -45,6 +45,7 @@ app.get('/test', (req, res) => {
 app.post('/voice', (req, res) => {
     const session = req.session;
     if (!session.conversation) {
+        // session.conversation = [{ role: 'system', content: 'You are Dr. Dongkook, a dentist at your dental clinic. When a caller contacts the clinic to book an appointment, offer available appointment dates and time. Assume any future dates for the caller to book an appointment. If the caller requires more suggestions, provide additional random dates and ask the caller to choose one. Once the caller selects a date, ask his name email and phone to confirm the appointment or you can even ask name at the start of call' }];
         session.conversation = [{ role: 'system', content: 'You are Dr. Dongkook, a dentist at your dental clinic. When a caller contacts the clinic to book an appointment, offer available appointment dates and time. Assume any future dates for the caller to book an appointment. If the caller requires more suggestions, provide additional random dates and ask the caller to choose one. Once the caller selects a date, ask his name email and phone to confirm the appointment or you can even ask name at the start of call' }];
     }
 
@@ -61,7 +62,7 @@ app.post('/voice', (req, res) => {
     res.send(twiml.toString());
 });
 
-app.post('/voice-response', async (req, res) => {
+app.post('http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response', async (req, res) => {
     console.log(req.body);
     const { SpeechResult: userMessage } = req.body;
     const session = req.session;
@@ -87,7 +88,7 @@ app.post('/voice-response', async (req, res) => {
     twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
     twiml.gather({
         input: 'speech',
-        action: '/voice-response',
+        action: 'http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response',
         method: 'POST',
         timeout: 2,
         hints: 'book, appointment, date, time, name, email, phone',
