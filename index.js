@@ -62,7 +62,7 @@ app.post('/voice', (req, res) => {
 app.post('/voice-response', async (req, res) => {
     console.log(req.body);
     const { SpeechResult: userMessage } = req.body;
-    const session = req.session;
+    // const session = req.session;
 
 
     // const openaiResponse = await openai.chat.completions.create({
@@ -83,6 +83,7 @@ app.post('/voice-response', async (req, res) => {
 
     const twiml = new twilio.twiml.VoiceResponse();
     twiml.say({ voice: 'Google.en-US-Neural2-J' }, 'Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?');
+    twiml.say({ voice: 'Google.en-US-Neural2-J' }, 'Hello too, this is Dr. Dongkook\'s dental clinic. How can I assist you today?');
     twiml.gather({
         input: 'speech',
         action: '/voice-response',
