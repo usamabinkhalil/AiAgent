@@ -54,6 +54,7 @@ app.post('/voice', (req, res) => {
         input: 'speech',
         action: '/voice-response',
         method: 'POST',
+        timeout: 2
     });
     res.type('text/xml');
     res.send(twiml.toString());
@@ -87,6 +88,7 @@ app.post('/voice-response', async (req, res) => {
         input: 'speech',
         action: '/voice-response',
         method: 'POST',
+        timeout: 2
     });
     res.type('text/xml');
     res.send(twiml.toString());
