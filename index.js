@@ -55,6 +55,8 @@ app.post('/voice', (req, res) => {
         input: 'speech',
         action: 'http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response',
         method: 'POST',
+        timeout: 3,
+        hints: 'book, appointment, date, time, name, email, phone',
     });
     res.type('text/xml');
     res.send(twiml.toString());
@@ -88,6 +90,8 @@ app.post('/voice-response', async (req, res) => {
         input: 'speech',
         action: 'http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response',
         method: 'POST',
+        timeout: 3,
+        hints: 'book, appointment, date, time, name, email, phone',
     });
     res.type('text/xml');
     res.send(twiml.toString());
