@@ -53,7 +53,7 @@ app.post('/voice', (req, res) => {
     twiml.say({ voice: 'Google.en-US-Neural2-J' }, 'Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?');
     twiml.gather({
         input: 'speech',
-        action: '/voice-response',
+        action: 'http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response',
         method: 'POST',
         timeout: 2,
         hints: 'book, appointment, date, time, name, email, phone',
@@ -62,7 +62,7 @@ app.post('/voice', (req, res) => {
     res.send(twiml.toString());
 });
 
-app.post('http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response', async (req, res) => {
+app.post('/voice-response', async (req, res) => {
     console.log(req.body);
     const { SpeechResult: userMessage } = req.body;
     const session = req.session;
