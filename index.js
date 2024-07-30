@@ -54,6 +54,8 @@ app.post('/voice', (req, res) => {
         input: 'speech',
         action: '/voice-response',
         method: 'POST',
+        timeout: 2,
+        hints: 'book, appointment, date, time, name, email, phone',
     });
     res.type('text/xml');
     res.send(twiml.toString());
@@ -83,11 +85,12 @@ app.post('/voice-response', async (req, res) => {
 
     const twiml = new twilio.twiml.VoiceResponse();
     twiml.say({ voice: 'Google.en-US-Neural2-J' }, 'Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?');
-    twiml.say({ voice: 'Google.en-US-Neural2-J' }, 'Hello too, this is Dr. Dongkook\'s dental clinic. How can I assist you today?');
     twiml.gather({
         input: 'speech',
         action: '/voice-response',
         method: 'POST',
+        timeout: 2,
+        hints: 'book, appointment, date, time, name, email, phone',
     });
     res.type('text/xml');
     res.send(twiml.toString());
