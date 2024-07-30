@@ -54,7 +54,6 @@ app.post('/voice', (req, res) => {
         input: 'speech',
         action: '/voice-response',
         method: 'POST',
-        timeout: 3,
     });
     res.type('text/xml');
     res.send(twiml.toString());
@@ -62,33 +61,32 @@ app.post('/voice', (req, res) => {
 
 app.post('/voice-response', async (req, res) => {
     console.log(req.body);
-    // const { SpeechResult: userMessage } = req.body;
+    const { SpeechResult: userMessage } = req.body;
     const session = req.session;
 
 
-    // const openaiResponse = await openai.chat.completions.create({
-    //     model: 'gpt-4o',
-    //     messages: [
-    //         ...session.conversation,
-    //         { role: 'user', content: userMessage }
-    //     ],
-    //     temperature: 0.7,
-    //     max_tokens: 150,
-    //     top_p: 1,
-    //     frequency_penalty: 0,
-    //     presence_penalty: 0,
-    // });
+    const openaiResponse = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: [
+            ...session.conversation,
+            { role: 'user', content: userMessage }
+        ],
+        temperature: 0.7,
+        max_tokens: 150,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+    });
 
-    // let replyMessage = openaiResponse.choices[0].message.content.trim();
-    // session.conversation.push({ role: 'assistant', content: replyMessage });
+    let replyMessage = openaiResponse.choices[0].message.content.trim();
+    session.conversation.push({ role: 'assistant', content: replyMessage });
 
     const twiml = new twilio.twiml.VoiceResponse();
-    twiml.say({ voice: 'Google.en-US-Neural2-J' }, 'Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?');
+    twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
     twiml.gather({
         input: 'speech',
         action: '/voice-response',
         method: 'POST',
-        timeout: 3,
     });
     res.type('text/xml');
     res.send(twiml.toString());
