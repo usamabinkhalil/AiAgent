@@ -53,7 +53,7 @@ app.post('/voice', (req, res) => {
     twiml.say({ voice: 'Google.en-US-Neural2-J' }, 'Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?');
     twiml.gather({
         input: 'speech',
-        action: 'http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response',
+        action: '/voice-response',
         method: 'POST',
         speechTimeout: "auto",
     });
@@ -87,7 +87,7 @@ app.post('/voice-response', async (req, res) => {
     twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
     twiml.gather({
         input: 'speech',
-        action: 'http://ec2-18-116-88-121.us-east-2.compute.amazonaws.com:3000/voice-response',
+        action: '/voice-response',
         method: 'POST',
         speechTimeout: "auto",
     });
