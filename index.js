@@ -89,7 +89,6 @@ app.post('/voice-response', async (req, res) => {
         voice: "alloy",
         input: replyMessage
     });
-    console.log(ttsResponse);
 
     
     // const audioData = ttsResponse.data.audio;
@@ -110,7 +109,7 @@ app.post('/voice-response', async (req, res) => {
     //     method: 'POST',
     //     speechTimeout: "auto",
     // });
-    twiml.play(audioUrl);
+    twiml.play('http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio/ttsResponse.wav');
     res.type('text/xml');
     res.send(twiml.toString());
 });
