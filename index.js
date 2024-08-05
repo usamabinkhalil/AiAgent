@@ -4,6 +4,7 @@ const twilio = require('twilio');
 const session = require('express-session');
 const OpenAI = require('openai');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const port = process.env.PORT || 3000;
