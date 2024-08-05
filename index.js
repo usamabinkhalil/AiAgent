@@ -13,8 +13,8 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
-
-app.use('/audio', express.static(path.join(__dirname, 'audio')));
+const audioDir = path.join(__dirname, 'audio');
+app.use('/audio', express.static(audioDir));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: 'your_secret_key',
@@ -83,26 +83,29 @@ app.post('/voice-response', async (req, res) => {
 
     let replyMessage = openaiResponse.choices[0].message.content.trim();
     console.log(replyMessage);
-    // const ttsResponse = await openai.audio.speech.create({
-    //     model: "tts-1",
-    //     voice: "alloy",
-    //     input: replyMessage
-    // });
-    // const audioData = ttsResponse.data.audio;
-    // const audioBuffer = Buffer.from(audioData, 'base64');
-    // fs.writeFileSync('ttsResponse.wav', audioBuffer);
+    const ttsResponse = await openai.audio.speech.create({
+        model: "tts-1",
+        voice: "alloy",
+        input: replyMessage
+    });
+    const audioData = ttsResponse.data.audio;
+    const audioBuffer = Buffer.from(audioData, 'base64');
+    const audioUrl = path.join(audioDir, 'ttsResponse.wav')
+    fs.writeFileSync(audioUrl, audioBuffer);
+    // http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio
 
     session.conversation.push({ role: 'assistant', content: replyMessage });
 
-    const twiml = new twilio.twiml.VoiceResponse();
-    twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, `<speak><prosody rate="medium" pitch="medium" volume="x-loud">${replyMessage}</prosody></speak>`);
-    // twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
-    twiml.gather({
-        input: 'speech',
-        action: '/voice-response',
-        method: 'POST',
-        speechTimeout: "auto",
-    });
+    // const twiml = new twilio.twiml.VoiceResponse();
+    // twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, `<speak><prosody rate="medium" pitch="medium" volume="x-loud">${replyMessage}</prosody></speak>`);
+    // // twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
+    // twiml.gather({
+    //     input: 'speech',
+    //     action: '/voice-response',
+    //     method: 'POST',
+    //     speechTimeout: "auto",
+    // });
+    twiml.play(audioUrl);
     res.type('text/xml');
     res.send(twiml.toString());
 });
