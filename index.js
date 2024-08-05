@@ -45,15 +45,25 @@ app.get('/test', (req, res) => {
 
 });
 
-app.post('/voice', (req, res) => {
+app.post('/voice', async (req, res) => {
     const session = req.session;
     if (!session.conversation) {
         // session.conversation = [{ role: 'system', content: 'You are Dr. Dongkook, a dentist at your dental clinic. When a caller contacts the clinic to book an appointment, offer available appointment dates and time. Assume any future dates for the caller to book an appointment. If the caller requires more suggestions, provide additional random dates and ask the caller to choose one. Once the caller selects a date, ask his name email and phone to confirm the appointment or you can even ask name at the start of call' }];
         session.conversation = [{ role: 'system', content: 'You are Dr. Dongkook, a dentist at your dental clinic. When a caller contacts the clinic to book an appointment, offer available appointment dates and time. Assume any future dates for the caller to book an appointment. If the caller requires more suggestions, provide additional random dates and ask the caller to choose one. Once the caller selects a date, ask his name email and phone to confirm the appointment or you can even ask name at the start of call' }];
     }
 
+    const ttsResponse = await openai.audio.speech.create({
+        model: "tts-1",
+        voice: "alloy",
+        input: "Hello, this is Dr. Dongkook's dental clinic. How can I assist you today?"
+    });
+    const audioBuffer = Buffer.from(await ttsResponse.arrayBuffer());
+    const audioUrl = path.join(audioDir, 'ttsResponse.mp3')
+    fs.writeFileSync(audioUrl, audioBuffer);
+
     const twiml = new twilio.twiml.VoiceResponse();
-    twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, '<speak><prosody rate="medium" pitch="medium" volume="x-loud">Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?</prosody></speak>');
+    // twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, '<speak><prosody rate="medium" pitch="medium" volume="x-loud">Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?</prosody></speak>');
+    twiml.play('http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio/ttsResponse.mp3');
     twiml.gather({
         input: 'speech',
         action: '/voice-response',
@@ -89,21 +99,15 @@ app.post('/voice-response', async (req, res) => {
         voice: "alloy",
         input: replyMessage
     });
-
-
-    // const audioData = ttsResponse.data.audio;
-    // const audioBuffer = Buffer.from(audioData, 'base64');
     const audioBuffer = Buffer.from(await ttsResponse.arrayBuffer());
     const audioUrl = path.join(audioDir, 'ttsResponse.mp3')
     fs.writeFileSync(audioUrl, audioBuffer);
-    // http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio
 
     session.conversation.push({ role: 'assistant', content: replyMessage });
 
     const twiml = new twilio.twiml.VoiceResponse();
     // twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, `<speak><prosody rate="medium" pitch="medium" volume="x-loud">${replyMessage}</prosody></speak>`);
     // // twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
-
     twiml.play('http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio/ttsResponse.mp3');
     twiml.gather({
         input: 'speech',
