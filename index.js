@@ -88,6 +88,8 @@ app.post('/voice-response', async (req, res) => {
         voice: "alloy",
         input: replyMessage
     });
+    console.log(ttsResponse);
+    
     const audioData = ttsResponse.data.audio;
     const audioBuffer = Buffer.from(audioData, 'base64');
     const audioUrl = path.join(audioDir, 'ttsResponse.wav')
