@@ -15,7 +15,12 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 const audioDir = path.join(__dirname, 'audio');
-app.use('/audio', express.static(audioDir));
+app.use('/audio', express.static(path.join(__dirname, 'audio')));
+app.get('/audio/ttsResponse.wav', (req, res) => {
+  const filePath = path.join(__dirname, 'audio', 'ttsResponse.wav');
+  res.set('Content-Type', 'audio/wav');
+  res.sendFile(filePath);
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: 'your_secret_key',
