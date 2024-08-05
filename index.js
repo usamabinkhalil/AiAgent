@@ -103,12 +103,12 @@ app.post('/voice-response', async (req, res) => {
     const twiml = new twilio.twiml.VoiceResponse();
     // twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, `<speak><prosody rate="medium" pitch="medium" volume="x-loud">${replyMessage}</prosody></speak>`);
     // // twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
-    // twiml.gather({
-    //     input: 'speech',
-    //     action: '/voice-response',
-    //     method: 'POST',
-    //     speechTimeout: "auto",
-    // });
+    twiml.gather({
+        input: 'speech',
+        action: '/voice-response',
+        method: 'POST',
+        speechTimeout: "auto",
+    });
     twiml.play('http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio/ttsResponse.mp3');
     res.type('text/xml');
     res.send(twiml.toString());
