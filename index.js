@@ -13,6 +13,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+app.use('/audio', express.static(path.join(__dirname, 'audio')));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: 'your_secret_key',
@@ -81,6 +82,15 @@ app.post('/voice-response', async (req, res) => {
 
     let replyMessage = openaiResponse.choices[0].message.content.trim();
     console.log(replyMessage);
+    // const ttsResponse = await openai.audio.speech.create({
+    //     model: "tts-1",
+    //     voice: "alloy",
+    //     input: replyMessage
+    // });
+    // const audioData = ttsResponse.data.audio;
+    // const audioBuffer = Buffer.from(audioData, 'base64');
+    // fs.writeFileSync('ttsResponse.wav', audioBuffer);
+
     session.conversation.push({ role: 'assistant', content: replyMessage });
 
     const twiml = new twilio.twiml.VoiceResponse();
