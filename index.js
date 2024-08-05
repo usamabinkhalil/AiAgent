@@ -84,7 +84,7 @@ app.post('/voice-response', async (req, res) => {
     session.conversation.push({ role: 'assistant', content: replyMessage });
 
     const twiml = new twilio.twiml.VoiceResponse();
-    twiml.say({ voice: 'Polly.Joanna-Neural', language: 'en-US' }, `${replyMessage}`);
+    twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, `<speak><prosody rate="medium" pitch="medium" volume="x-loud">${replyMessage}</prosody></speak>`);
     // twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
     twiml.gather({
         input: 'speech',
