@@ -15,12 +15,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 const audioDir = path.join(__dirname, 'audio');
-app.use('/audio', express.static(path.join(__dirname, 'audio')));
-app.get('/audio/ttsResponse.wav', (req, res) => {
-  const filePath = path.join(__dirname, 'audio', 'ttsResponse.wav');
-  res.set('Content-Type', 'audio/wav');
-  res.sendFile(filePath);
-});
+app.use('/audio', express.static(audioDir));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: 'your_secret_key',
@@ -99,7 +94,7 @@ app.post('/voice-response', async (req, res) => {
     // const audioData = ttsResponse.data.audio;
     // const audioBuffer = Buffer.from(audioData, 'base64');
     const audioBuffer = Buffer.from(await ttsResponse.arrayBuffer());
-    const audioUrl = path.join(audioDir, 'ttsResponse.wav')
+    const audioUrl = path.join(audioDir, 'ttsResponse.mp3')
     fs.writeFileSync(audioUrl, audioBuffer);
     // http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio
 
@@ -114,7 +109,7 @@ app.post('/voice-response', async (req, res) => {
     //     method: 'POST',
     //     speechTimeout: "auto",
     // });
-    twiml.play('http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio/ttsResponse.wav');
+    twiml.play('http://ec2-18-219-35-37.us-east-2.compute.amazonaws.com:3000/audio/ttsResponse.mp3');
     res.type('text/xml');
     res.send(twiml.toString());
 });
