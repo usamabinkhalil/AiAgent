@@ -50,7 +50,7 @@ app.post('/voice', (req, res) => {
     }
 
     const twiml = new twilio.twiml.VoiceResponse();
-    twiml.say({ voice: 'Google.en-US-Neural2-J' }, '<speak><prosody rate="medium" pitch="medium" volume="x-loud">Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?</prosody></speak>');
+    twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, '<speak><prosody rate="medium" pitch="medium" volume="x-loud">Hello, this is Dr. Dongkook\'s dental clinic. How can I assist you today?</prosody></speak>');
     twiml.gather({
         input: 'speech',
         action: '/voice-response',
@@ -84,7 +84,7 @@ app.post('/voice-response', async (req, res) => {
     session.conversation.push({ role: 'assistant', content: replyMessage });
 
     const twiml = new twilio.twiml.VoiceResponse();
-    twiml.say({ voice: 'Google.en-US-Neural2-J' }, `<speak><prosody rate="medium" pitch="medium" volume="x-loud">${replyMessage}</prosody></speak>`);
+    twiml.say({ voice: 'Google.en-US-Neural2-J', language: 'en-US' }, `<speak><prosody rate="medium" pitch="medium" volume="x-loud">${replyMessage}</prosody></speak>`);
     // twiml.say({ voice: 'Google.en-US-Neural2-J' }, replyMessage);
     twiml.gather({
         input: 'speech',
