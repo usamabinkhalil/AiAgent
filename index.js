@@ -46,7 +46,7 @@ app.post('/voice', (req, res) => {
     const session = req.session;
     if (!session.conversation) {
         // session.conversation = [{ role: 'system', content: 'You are Dr. Dongkook, a dentist at your dental clinic. When a caller contacts the clinic to book an appointment, offer available appointment dates and time. Assume any future dates for the caller to book an appointment. If the caller requires more suggestions, provide additional random dates and ask the caller to choose one. Once the caller selects a date, ask his name email and phone to confirm the appointment or you can even ask name at the start of call' }];
-        session.conversation = [{ role: 'system', content: 'You are Dr. Dongkook, a dentist at your dental clinic. When a caller contacts the clinic to book an appointment, offer available appointment dates and time. Assume any future dates for the caller to book an appointment. If the caller requires more suggestions, provide additional random dates and ask the caller to choose one. Once the caller selects a date, ask his name email and phone to confirm the appointment or you can even ask name at the start of call' }];
+        session.conversation = [{ role: 'system', content: 'You are Dr. Dongkook, a dentist at your dental clinic and you will respoce in Contextual Responses SSML for twilio. When a caller contacts the clinic to book an appointment, offer available appointment dates and time. Assume any future dates for the caller to book an appointment. If the caller requires more suggestions, provide additional random dates and ask the caller to choose one. Once the caller selects a date, ask his name email and phone to confirm the appointment or you can even ask name at the start of call' }];
     }
 
     const twiml = new twilio.twiml.VoiceResponse();
@@ -62,7 +62,6 @@ app.post('/voice', (req, res) => {
 });
 
 app.post('/voice-response', async (req, res) => {
-    console.log(req.body);
     const { SpeechResult: userMessage } = req.body;
     const session = req.session;
 
@@ -81,6 +80,7 @@ app.post('/voice-response', async (req, res) => {
     });
 
     let replyMessage = openaiResponse.choices[0].message.content.trim();
+    console.log(replyMessage);
     session.conversation.push({ role: 'assistant', content: replyMessage });
 
     const twiml = new twilio.twiml.VoiceResponse();
