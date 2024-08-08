@@ -98,9 +98,11 @@ app.post('/voice-response', async (req, res) => {
     });
 
     // Get the total tokens used
-    const totalTokens = openaiResponse.data.usage.total_tokens;
+    console.log(openaiResponse);
+    
+    // const totalTokens = openaiResponse.data.usage.total_tokens;
 
-    console.log(`Total tokens used: ${totalTokens}`);
+    // console.log(`Total tokens used: ${totalTokens}`);
 
     let replyMessage = openaiResponse.choices[0].message.content.trim();
     console.log(replyMessage);
