@@ -5,6 +5,11 @@ const session = require('express-session');
 const OpenAI = require('openai');
 const path = require('path');
 const fs = require('fs');
+const ffmpeg = require('fluent-ffmpeg');
+const ffprobePath = require('ffprobe-static').path;
+
+// Set ffprobe path
+ffmpeg.setFfprobePath(ffprobePath);
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -80,7 +85,7 @@ app.post('/voice-response', async (req, res) => {
 
 
     const openaiResponse = await openai.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini',
         messages: [
             ...session.conversation,
             { role: 'user', content: userMessage }
@@ -92,6 +97,11 @@ app.post('/voice-response', async (req, res) => {
         presence_penalty: 0,
     });
 
+    // Get the total tokens used
+    const totalTokens = openaiResponse.data.usage.total_tokens;
+
+    console.log(`Total tokens used: ${totalTokens}`);
+
     let replyMessage = openaiResponse.choices[0].message.content.trim();
     console.log(replyMessage);
     const ttsResponse = await openai.audio.speech.create({
@@ -102,6 +112,15 @@ app.post('/voice-response', async (req, res) => {
     const audioBuffer = Buffer.from(await ttsResponse.arrayBuffer());
     const audioUrl = path.join(audioDir, 'ttsResponse.mp3')
     fs.writeFileSync(audioUrl, audioBuffer);
+
+    ffmpeg.ffprobe(audioUrl, (err, metadata) => {
+        if (err) {
+            console.error('Error getting audio metadata:', err);
+            return;
+        }
+        const duration = metadata.format.duration;
+        console.log(`Audio duration: ${duration} seconds`);
+    });
 
     session.conversation.push({ role: 'assistant', content: replyMessage });
 
