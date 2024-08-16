@@ -74,7 +74,7 @@ app.post('/voice', async (req, res) => {
 
             **Step 2: If the Customer Chooses Delivery**
             - **Request Delivery Address:** "Could I have your delivery address, please?"
-            - **Confirm Information:** After they provide the address, respond with: "Thank you. Just to confirm, your address is **[replace with the provided address]**, and your phone number is **[replace with the provided phone number]**. Is that correct?"
+            - **Confirm Information:** After they provide the information, respond with there provided info as following: "Thank you. Just to confirm, your address is **[replace with the provided address]**, and your phone number is **[replace with the provided phone number]**. Is that correct?"
 
             **Step 3: Take the Order**
             - **Ask for the Order:** "What would you like to order today?"
