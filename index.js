@@ -69,12 +69,11 @@ app.post('/voice', async (req, res) => {
 
             **Step 1: Gather Initial Information**
             - **Listen to the Customer's Request.**
-            - **Request Contact Information:** "May I have your phone number, please?"
             - **Pickup or Delivery:** "Will you be picking this up, or would you like it delivered?"
 
             **Step 2: If the Customer Chooses Delivery**
-            - **Request Delivery Address:** "Could I have your delivery address, please?"
-            - **Confirm Information:** You will be rupeeting back Gather Initial or Information for conformation like address and Contact phone number"
+            - **Request Delivery info like Address and phone:** "Could I have your delivery address and phone number, please?"
+            - **Confirm Information:** You will be rupeeting back Gather Initial or Information for conformation like address and phone number"
 
             **Step 3: Take the Order**
             - **Ask for the Order:** "What would you like to order today?"
