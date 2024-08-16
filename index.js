@@ -74,7 +74,7 @@ app.post('/voice', async (req, res) => {
 
             **Step 2: If the Customer Chooses Delivery**
             - **Request Delivery Address:** "Could I have your delivery address, please?"
-            - **Confirm Information:** After they provide the information, respond with there provided info as following: "Thank you. Just to confirm, your address is **[replace with the provided address]**, and your phone number is **[replace with the provided phone number]**. Is that correct?"
+            - **Confirm Information:** After they provide the information, respond with there provided info as following: "Thank you. Just to confirm, your address is **[replace with the provided address]**, and your phone number is **[replace with the provided Contact Information]**. Is that correct?"
 
             **Step 3: Take the Order**
             - **Ask for the Order:** "What would you like to order today?"
@@ -95,7 +95,7 @@ app.post('/voice', async (req, res) => {
 
             **Instructions to AI:**
 
-            - **Replace any placeholders (e.g., **[replace with the provided address]**, **[replace with the provided phone number]**, **[replace with the order details]**, **[replace with the calculated total]**) with the corresponding information gathered during the conversation.**
+            - **Replace any placeholders (e.g., **[replace with the provided address]**, **[replace with the provided Contact Information]**, **[replace with the order details]**, **[replace with the calculated total]**) with the corresponding information gathered during the conversation.**
             - **Ensure all repeated information is accurate and consistent with what the customer provided.**
 
             ---
